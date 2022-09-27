@@ -1,6 +1,6 @@
 package model;
 
-public enum Classificacao {
+public enum Classification {
     CASA("Casa"),
     COMPRAS("Compras"),  
     SAUDE("Saúde"),  
@@ -11,14 +11,14 @@ public enum Classificacao {
     SALARIO("Salário"), 
     OUTRO("Outros");
     
-    private String valor;
+    private String value;
             
-    Classificacao(String valor){
-        this.valor = valor;
+    Classification(String value){
+        this.value = value;
     }
     
-    public String getValor(){
-        return valor;
+    public String getValue(){
+        return value;
     }
 }
 

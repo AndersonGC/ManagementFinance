@@ -1,6 +1,6 @@
 package view;
 
-import controller.EntradaController;
+import controller.MovementController;
 import java.awt.Toolkit;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -8,21 +8,28 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
-import model.Classificacao;
-import model.Entrada;
+import javax.swing.JLabel;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import model.Classification;
+import model.Movement;
 
 /**
  *
  * @author Anderson, Fabricio and Lavínia
  */
 public class MainFrame extends javax.swing.JFrame {
-
+    
+    private final MovementController controller;
+    
     public MainFrame() {
+        controller = new MovementController(this); 
         initComponents();
         setIconTitle();
         setTitle("Management Finance");
+        startTable();
         inserirNoCombo();
-        ganhoCheck.setSelected(true);
+        entryCheck.setSelected(true);      
     }
     @SuppressWarnings("unchecked")
    
@@ -34,10 +41,10 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         title = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
-        title1 = new javax.swing.JLabel();
+        nameTitle = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        tableEntrada = new javax.swing.JTable();
+        entryTable = new javax.swing.JTable();
         jPanel4 = new javax.swing.JPanel();
         entrada = new javax.swing.JLabel();
         saida = new javax.swing.JLabel();
@@ -45,18 +52,18 @@ public class MainFrame extends javax.swing.JFrame {
         saidaTxt = new javax.swing.JLabel();
         resultadoTxt = new javax.swing.JLabel();
         resultado = new javax.swing.JLabel();
-        nome = new javax.swing.JLabel();
-        nomeTxt = new javax.swing.JTextField();
-        classificacao = new javax.swing.JLabel();
-        valorTxt = new javax.swing.JTextField();
-        valor = new javax.swing.JLabel();
+        name = new javax.swing.JLabel();
+        nameTxt = new javax.swing.JTextField();
+        classification = new javax.swing.JLabel();
+        valueTxt = new javax.swing.JTextField();
+        value = new javax.swing.JLabel();
         dateTxt = new javax.swing.JTextField();
-        data = new javax.swing.JLabel();
-        gastoCheck = new javax.swing.JCheckBox();
-        ganhoCheck = new javax.swing.JCheckBox();
-        cadastrarBtn = new javax.swing.JButton();
-        excluirBtn = new javax.swing.JButton();
-        classificacaoC = new javax.swing.JComboBox<>();
+        date = new javax.swing.JLabel();
+        exitCheck = new javax.swing.JCheckBox();
+        entryCheck = new javax.swing.JCheckBox();
+        registerBtn = new javax.swing.JButton();
+        deleteBtn = new javax.swing.JButton();
+        classificationCombo = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -73,25 +80,25 @@ public class MainFrame extends javax.swing.JFrame {
 
         jPanel5.setBackground(new java.awt.Color(0, 102, 102));
 
-        title1.setBackground(new java.awt.Color(0, 51, 51));
-        title1.setFont(new java.awt.Font("Trebuchet MS", 0, 18)); // NOI18N
-        title1.setForeground(new java.awt.Color(255, 255, 255));
-        title1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        title1.setText("Seu José");
+        nameTitle.setBackground(new java.awt.Color(0, 51, 51));
+        nameTitle.setFont(new java.awt.Font("Trebuchet MS", 0, 18)); // NOI18N
+        nameTitle.setForeground(new java.awt.Color(255, 255, 255));
+        nameTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        nameTitle.setText("Seu José");
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addComponent(title1, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(nameTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                 .addContainerGap(13, Short.MAX_VALUE)
-                .addComponent(title1)
+                .addComponent(nameTitle)
                 .addContainerGap())
         );
 
@@ -117,7 +124,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         jPanel3.setForeground(new java.awt.Color(153, 153, 153));
 
-        tableEntrada.setModel(new javax.swing.table.DefaultTableModel(
+        entryTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -128,7 +135,7 @@ public class MainFrame extends javax.swing.JFrame {
                 "Nome", "Classificação", "Valor", "Data", "Cadastro"
             }
         ));
-        jScrollPane2.setViewportView(tableEntrada);
+        jScrollPane2.setViewportView(entryTable);
 
         jPanel4.setBackground(new java.awt.Color(0, 102, 102));
         jPanel4.setForeground(new java.awt.Color(0, 102, 102));
@@ -138,7 +145,7 @@ public class MainFrame extends javax.swing.JFrame {
         entrada.setText("Entradas:");
 
         saida.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
-        saida.setForeground(new java.awt.Color(255, 102, 102));
+        saida.setForeground(new java.awt.Color(255, 51, 51));
         saida.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         saida.setText("Saídas:");
 
@@ -148,17 +155,17 @@ public class MainFrame extends javax.swing.JFrame {
         entradaTxt.setText("R$12,00");
 
         saidaTxt.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
-        saidaTxt.setForeground(new java.awt.Color(255, 102, 102));
+        saidaTxt.setForeground(new java.awt.Color(255, 51, 51));
         saidaTxt.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         saidaTxt.setText("R$8,00");
 
         resultadoTxt.setFont(new java.awt.Font("Trebuchet MS", 1, 24)); // NOI18N
-        resultadoTxt.setForeground(new java.awt.Color(0, 51, 0));
+        resultadoTxt.setForeground(new java.awt.Color(255, 255, 255));
         resultadoTxt.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         resultadoTxt.setText("R$20,00");
 
         resultado.setFont(new java.awt.Font("Trebuchet MS", 1, 24)); // NOI18N
-        resultado.setForeground(new java.awt.Color(0, 51, 0));
+        resultado.setForeground(new java.awt.Color(255, 255, 255));
         resultado.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         resultado.setText("Resultado:");
 
@@ -201,51 +208,51 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGap(0, 8, Short.MAX_VALUE))
         );
 
-        nome.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
-        nome.setText("Nome:");
+        name.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
+        name.setText("Nome:");
 
-        classificacao.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
-        classificacao.setText("Classificação:");
+        classification.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
+        classification.setText("Classificação:");
 
-        valor.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
-        valor.setText("Valor:");
+        value.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
+        value.setText("Valor:");
 
-        data.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
-        data.setText("Data:");
+        date.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
+        date.setText("Data:");
 
-        gastoCheck.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
-        gastoCheck.setLabel("Gasto");
-        gastoCheck.addActionListener(new java.awt.event.ActionListener() {
+        exitCheck.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
+        exitCheck.setText("Saída");
+        exitCheck.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                gastoCheckActionPerformed(evt);
+                exitCheckActionPerformed(evt);
             }
         });
 
-        ganhoCheck.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
-        ganhoCheck.setLabel("Ganho");
-        ganhoCheck.addActionListener(new java.awt.event.ActionListener() {
+        entryCheck.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
+        entryCheck.setText("Entrada");
+        entryCheck.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ganhoCheckActionPerformed(evt);
+                entryCheckActionPerformed(evt);
             }
         });
 
-        cadastrarBtn.setBackground(new java.awt.Color(0, 51, 51));
-        cadastrarBtn.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
-        cadastrarBtn.setForeground(new java.awt.Color(255, 255, 255));
-        cadastrarBtn.setText("Cadastrar");
-        cadastrarBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+        registerBtn.setBackground(new java.awt.Color(0, 51, 51));
+        registerBtn.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
+        registerBtn.setForeground(new java.awt.Color(255, 255, 255));
+        registerBtn.setText("Cadastrar");
+        registerBtn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                cadastrarBtnMouseClicked(evt);
+                registerBtnMouseClicked(evt);
             }
         });
 
-        excluirBtn.setBackground(new java.awt.Color(255, 102, 102));
-        excluirBtn.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 48)); // NOI18N
-        excluirBtn.setForeground(new java.awt.Color(255, 255, 255));
-        excluirBtn.setText("X");
+        deleteBtn.setBackground(new java.awt.Color(255, 51, 51));
+        deleteBtn.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 48)); // NOI18N
+        deleteBtn.setForeground(new java.awt.Color(255, 255, 255));
+        deleteBtn.setText("X");
 
-        classificacaoC.setBackground(new java.awt.Color(255, 255, 255));
-        classificacaoC.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
+        classificationCombo.setBackground(new java.awt.Color(255, 255, 255));
+        classificationCombo.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -254,26 +261,26 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(nomeTxt)
-                    .addComponent(valorTxt)
+                    .addComponent(nameTxt)
+                    .addComponent(valueTxt)
                     .addComponent(dateTxt)
-                    .addComponent(classificacaoC, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(cadastrarBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 307, Short.MAX_VALUE)
-                    .addComponent(nome)
-                    .addComponent(classificacao)
-                    .addComponent(valor)
-                    .addComponent(data)
+                    .addComponent(classificationCombo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(registerBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 307, Short.MAX_VALUE)
+                    .addComponent(name)
+                    .addComponent(classification)
+                    .addComponent(value)
+                    .addComponent(date)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(ganhoCheck)
+                        .addComponent(entryCheck)
                         .addGap(35, 35, 35)
-                        .addComponent(gastoCheck)))
+                        .addComponent(exitCheck)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(excluirBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(deleteBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(16, 16, 16))
         );
         jPanel3Layout.setVerticalGroup(
@@ -283,30 +290,30 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(nome)
+                        .addComponent(name)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(nomeTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(nameTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(classificacao)
+                        .addComponent(classification)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(classificacaoC, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(classificationCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(valor)
+                        .addComponent(value)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(valorTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(valueTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(data)
+                        .addComponent(date)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(dateTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(gastoCheck)
-                            .addComponent(ganhoCheck))))
+                            .addComponent(exitCheck)
+                            .addComponent(entryCheck))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(excluirBtn, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(deleteBtn, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(cadastrarBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(registerBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(15, Short.MAX_VALUE))
         );
 
@@ -346,37 +353,31 @@ public class MainFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void cadastrarBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cadastrarBtnMouseClicked
- 
-       Date diaCadastro = new Date();
-       Object o = classificacaoC.getSelectedItem();
-       Classificacao c = (Classificacao)o;
-       EntradaController entrada = new EntradaController(nomeTxt.getText(), c, Double.valueOf(valorTxt.getText()), dateTxt.getText() , diaCadastro);
-       System.out.println(entrada);
-        
-    }//GEN-LAST:event_cadastrarBtnMouseClicked
+    private void registerBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_registerBtnMouseClicked
+       this.controller.registerMovement();
+    }//GEN-LAST:event_registerBtnMouseClicked
 
-    private void ganhoCheckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ganhoCheckActionPerformed
-        gastoCheck.setSelected(false);
-    }//GEN-LAST:event_ganhoCheckActionPerformed
+    private void entryCheckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_entryCheckActionPerformed
+        exitCheck.setSelected(false);
+    }//GEN-LAST:event_entryCheckActionPerformed
 
-    private void gastoCheckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gastoCheckActionPerformed
-        ganhoCheck.setSelected(false);
-    }//GEN-LAST:event_gastoCheckActionPerformed
+    private void exitCheckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitCheckActionPerformed
+        entryCheck.setSelected(false);
+    }//GEN-LAST:event_exitCheckActionPerformed
 
 
 
     private void inserirNoCombo(){
         DefaultComboBoxModel myComboModel = new DefaultComboBoxModel();
-        myComboModel.addElement(Classificacao.ALIMENTACAO);
-        myComboModel.addElement(Classificacao.AUTOMOVEL);
-        myComboModel.addElement(Classificacao.BEM_ESTAR);
-        myComboModel.addElement(Classificacao.CASA);
-        myComboModel.addElement(Classificacao.INVESTIMENTO);
-        myComboModel.addElement(Classificacao.SALARIO);
-        myComboModel.addElement(Classificacao.SAUDE);
-        myComboModel.addElement(Classificacao.OUTRO);
-        classificacaoC.setModel(myComboModel);
+        myComboModel.addElement(Classification.ALIMENTACAO.getValue());
+        myComboModel.addElement(Classification.AUTOMOVEL.getValue());
+        myComboModel.addElement(Classification.BEM_ESTAR.getValue());
+        myComboModel.addElement(Classification.CASA.getValue());
+        myComboModel.addElement(Classification.INVESTIMENTO.getValue());
+        myComboModel.addElement(Classification.SALARIO.getValue());
+        myComboModel.addElement(Classification.SAUDE.getValue());
+        myComboModel.addElement(Classification.OUTRO.getValue());
+        classificationCombo.setModel(myComboModel);
     }
     
     public static void main(String args[]) {
@@ -389,36 +390,109 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton cadastrarBtn;
-    private javax.swing.JLabel classificacao;
-    private javax.swing.JComboBox<String> classificacaoC;
-    private javax.swing.JLabel data;
+    private javax.swing.JLabel classification;
+    private javax.swing.JComboBox<String> classificationCombo;
+    private javax.swing.JLabel date;
     private javax.swing.JTextField dateTxt;
+    private javax.swing.JButton deleteBtn;
     private javax.swing.JLabel entrada;
     private javax.swing.JLabel entradaTxt;
-    private javax.swing.JButton excluirBtn;
-    private javax.swing.JCheckBox ganhoCheck;
-    private javax.swing.JCheckBox gastoCheck;
+    private javax.swing.JCheckBox entryCheck;
+    private javax.swing.JTable entryTable;
+    private javax.swing.JCheckBox exitCheck;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JLabel nome;
-    private javax.swing.JTextField nomeTxt;
+    private javax.swing.JLabel name;
+    private javax.swing.JLabel nameTitle;
+    private javax.swing.JTextField nameTxt;
+    private javax.swing.JButton registerBtn;
     private javax.swing.JLabel resultado;
     private javax.swing.JLabel resultadoTxt;
     private javax.swing.JLabel saida;
     private javax.swing.JLabel saidaTxt;
-    private javax.swing.JTable tableEntrada;
     private javax.swing.JLabel title;
-    private javax.swing.JLabel title1;
-    private javax.swing.JLabel valor;
-    private javax.swing.JTextField valorTxt;
+    private javax.swing.JLabel value;
+    private javax.swing.JTextField valueTxt;
     // End of variables declaration//GEN-END:variables
 
     private void setIconTitle() {
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("./img/icon.png")));
     }
+
+    public JComboBox<String> getClassificationCombo() {
+        return classificationCombo;
+    }
+
+    public void setClassificationCombo(JComboBox<String> classificationCombo) {
+        this.classificationCombo = classificationCombo;
+    }
+
+    public JTextField getDateTxt() {
+        return dateTxt;
+    }
+
+    public void setDateTxt(JTextField dateTxt) {
+        this.dateTxt = dateTxt;
+    }
+
+    public JLabel getEntradaTxt() {
+        return entradaTxt;
+    }
+
+    public void setEntradaTxt(JLabel entradaTxt) {
+        this.entradaTxt = entradaTxt;
+    }
+
+    public JTextField getNameTxt() {
+        return nameTxt;
+    }
+
+    public void setNameTxt(JTextField nameTxt) {
+        this.nameTxt = nameTxt;
+    }
+
+    public JLabel getResultadoTxt() {
+        return resultadoTxt;
+    }
+
+    public void setResultadoTxt(JLabel resultadoTxt) {
+        this.resultadoTxt = resultadoTxt;
+    }
+
+    public JLabel getSaidaTxt() {
+        return saidaTxt;
+    }
+
+    public void setSaidaTxt(JLabel saidaTxt) {
+        this.saidaTxt = saidaTxt;
+    }
+
+    public JTextField getValueTxt() {
+        return valueTxt;
+    }
+
+    public void setValueTxt(JTextField valueTxt) {
+        this.valueTxt = valueTxt;
+    }
+
+    public JTable getEntryTable() {
+        return entryTable;
+    }
+
+    public void setEntryTable(JTable entryTable) {
+        this.entryTable = entryTable;
+    }
+
+    
+    
+    
+    private void startTable() {
+        this.controller.updateTable();
+    }
+    
+    
 }
