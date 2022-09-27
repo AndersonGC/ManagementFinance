@@ -1,27 +1,26 @@
 package view;
 
+import controller.EntradaController;
 import java.awt.Toolkit;
 import java.time.LocalDateTime;
 import java.util.Date;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
+import javax.swing.JComboBox;
 import model.Classificacao;
 import model.Entrada;
-import model.Pessoa;
 
 /**
  *
- * @author Anderson & Fabricio
+ * @author Anderson, Fabricio and Lavínia
  */
 public class MainFrame extends javax.swing.JFrame {
 
-    /**
-     * Creates new form MainFrame
-     */
     public MainFrame() {
         initComponents();
         setIconTitle();
         inserirNoCombo();
+        ganhoCheck.setSelected(true);
     }
     @SuppressWarnings("unchecked")
    
@@ -178,9 +177,19 @@ public class MainFrame extends javax.swing.JFrame {
 
         gastoCheck.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
         gastoCheck.setLabel("Gasto");
+        gastoCheck.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                gastoCheckActionPerformed(evt);
+            }
+        });
 
         ganhoCheck.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
         ganhoCheck.setLabel("Ganho");
+        ganhoCheck.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ganhoCheckActionPerformed(evt);
+            }
+        });
 
         cadastrarBtn.setBackground(new java.awt.Color(0, 51, 51));
         cadastrarBtn.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
@@ -197,7 +206,8 @@ public class MainFrame extends javax.swing.JFrame {
         excluirBtn.setForeground(new java.awt.Color(255, 255, 255));
         excluirBtn.setText("X");
 
-        classificacaoC.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Casa", "Compras", "Saúde", "Automóvel", "Alimentação", "Bem estar", "Investimento", "Salário", "Outros" }));
+        classificacaoC.setBackground(new java.awt.Color(255, 255, 255));
+        classificacaoC.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -303,38 +313,32 @@ public class MainFrame extends javax.swing.JFrame {
        Date diaCadastro = new Date();
        Object o = classificacaoC.getSelectedItem();
        Classificacao c = (Classificacao)o;
-       
-       Entrada entrada = new Entrada(nomeTxt.getText(), c, Double.valueOf(valorTxt.getText()), dateTxt.getText() , diaCadastro);
-       
-        System.out.println(entrada);
-       
-       System.out.println(nomeTxt.getText());
+       EntradaController entrada = new EntradaController(nomeTxt.getText(), c, Double.valueOf(valorTxt.getText()), dateTxt.getText() , diaCadastro);
+       System.out.println(entrada);
         
     }//GEN-LAST:event_cadastrarBtnMouseClicked
 
-    ID | Nome | Classificacao (ENUM) |  TipoT | Valor |Data | 
-1     Gato	Alimentacao	      0      100
-2     Cachorro	Alimentacao	      1      50
+    private void ganhoCheckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ganhoCheckActionPerformed
+        gastoCheck.setSelected(false);
+    }//GEN-LAST:event_ganhoCheckActionPerformed
 
-    public void inserirNoCombo(){
+    private void gastoCheckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gastoCheckActionPerformed
+        ganhoCheck.setSelected(false);
+    }//GEN-LAST:event_gastoCheckActionPerformed
+
+
+
+    private void inserirNoCombo(){
         DefaultComboBoxModel myComboModel = new DefaultComboBoxModel();
         myComboModel.addElement(Classificacao.ALIMENTACAO);
         myComboModel.addElement(Classificacao.AUTOMOVEL);
         myComboModel.addElement(Classificacao.BEM_ESTAR);
         myComboModel.addElement(Classificacao.CASA);
         myComboModel.addElement(Classificacao.INVESTIMENTO);
+        myComboModel.addElement(Classificacao.SALARIO);
+        myComboModel.addElement(Classificacao.SAUDE);
+        myComboModel.addElement(Classificacao.OUTRO);
         classificacaoC.setModel(myComboModel);
-
-        /*
-        DefaultComboBoxModel myComboModel = new DefaultComboBoxModel();
-        Pessoa p1 = new Pessoa();
-        Pessoa p2 = new Pessoa();
-        classificacaoC.setModel(myComboModel);
-
-       Object o = classificacaoC.getSelectedItem();
-       Pessoa pSelecionada = (Pessoa)o;
-*/        
-
     }
     
     public static void main(String args[]) {
