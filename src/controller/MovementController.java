@@ -1,6 +1,8 @@
 package controller;
 
 import DAO.MovementDAO;
+import java.awt.Label;
+import java.time.Clock;
 import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.table.DefaultTableModel;
@@ -11,6 +13,7 @@ import view.MainFrame;
 public class MovementController {
 
     private final MainFrame view;
+    private final MovementDAO movementDAO = new MovementDAO();
 
     public MovementController(MainFrame view) {
         this.view = view;
@@ -29,13 +32,25 @@ public class MovementController {
         String entryDay = view.getDateTxt().getText();
         Date registrationDay = new Date();
 
-        Movement movement = new Movement(name, classification, value, entryDay, registrationDay);
+        movementDAO.insert(new Movement(name, classification, value, entryDay, registrationDay));
         
     }
 
+    
+    public void updateResult(){           
+    }
+    
+    public void updateEntry(){          
+    }
+    
+    public void updateExit(){           
+    }
+    
+    public void removeMovement(){
+    }
+    
     public void updateTable() {
-
-        MovementDAO movementDAO = new MovementDAO();
+        
         ArrayList<Movement> movements = movementDAO.selectAll();
         
         DefaultTableModel tableModel = (DefaultTableModel)view.getEntryTable().getModel();

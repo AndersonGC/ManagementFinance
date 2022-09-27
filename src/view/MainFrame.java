@@ -23,7 +23,8 @@ public class MainFrame extends javax.swing.JFrame {
     private final MovementController controller;
     
     public MainFrame() {
-        controller = new MovementController(this); 
+        controller = new MovementController(this);
+        updateResult();
         initComponents();
         setIconTitle();
         setTitle("Management Finance");
@@ -455,14 +456,6 @@ public class MainFrame extends javax.swing.JFrame {
         this.nameTxt = nameTxt;
     }
 
-    public JLabel getResultadoTxt() {
-        return resultadoTxt;
-    }
-
-    public void setResultadoTxt(JLabel resultadoTxt) {
-        this.resultadoTxt = resultadoTxt;
-    }
-
     public JLabel getSaidaTxt() {
         return saidaTxt;
     }
@@ -487,11 +480,11 @@ public class MainFrame extends javax.swing.JFrame {
         this.entryTable = entryTable;
     }
 
-    
-    
-    
     private void startTable() {
         this.controller.updateTable();
+    }
+
+    private void updateResult() {
     }
     
     
