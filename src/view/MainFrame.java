@@ -23,11 +23,13 @@ public class MainFrame extends javax.swing.JFrame {
     private final MovementController controller;
     
     public MainFrame() {
-        controller = new MovementController(this);
-        updateResult();
         initComponents();
         setIconTitle();
         setTitle("Management Finance");
+        controller = new MovementController(this);
+        updateResult();
+        updateEntry();
+        updateExit();
         startTable();
         inserirNoCombo();
         entryCheck.setSelected(true);      
@@ -251,6 +253,11 @@ public class MainFrame extends javax.swing.JFrame {
         deleteBtn.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 48)); // NOI18N
         deleteBtn.setForeground(new java.awt.Color(255, 255, 255));
         deleteBtn.setText("X");
+        deleteBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                deleteBtnMouseClicked(evt);
+            }
+        });
 
         classificationCombo.setBackground(new java.awt.Color(255, 255, 255));
         classificationCombo.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
@@ -366,6 +373,10 @@ public class MainFrame extends javax.swing.JFrame {
         entryCheck.setSelected(false);
     }//GEN-LAST:event_exitCheckActionPerformed
 
+    private void deleteBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deleteBtnMouseClicked
+        this.controller.removeMovement(getEntryTable().getSelectedRow());
+    }//GEN-LAST:event_deleteBtnMouseClicked
+
 
 
     private void inserirNoCombo(){
@@ -480,11 +491,28 @@ public class MainFrame extends javax.swing.JFrame {
         this.entryTable = entryTable;
     }
 
+    public JLabel getResultadoTxt() {
+        return resultadoTxt;
+    }
+
+    public void setResultadoTxt(JLabel resultadoTxt) {
+        this.resultadoTxt = resultadoTxt;
+    }
+    
     private void startTable() {
         this.controller.updateTable();
     }
 
     private void updateResult() {
+        this.controller.updateResult();
+    }
+
+    private void updateEntry() {
+        this.controller.updateEntry();
+    }
+
+    private void updateExit() {
+        this.controller.updateExit();
     }
     
     
