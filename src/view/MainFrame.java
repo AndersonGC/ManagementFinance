@@ -6,11 +6,14 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.text.MaskFormatter;
 import model.Classification;
 import model.Movement;
 
@@ -19,11 +22,12 @@ import model.Movement;
  * @author Anderson, Fabricio and Lavínia
  */
 public class MainFrame extends javax.swing.JFrame {
-    
+
     private final MovementController controller;
-    
+
     public MainFrame() {
         initComponents();
+        
         setIconTitle();
         setTitle("Management Finance");
         controller = new MovementController(this);
@@ -32,11 +36,12 @@ public class MainFrame extends javax.swing.JFrame {
         updateExit();
         startTable();
         inserirNoCombo();
-        entryCheck.setSelected(true);      
+        entryCheck.setSelected(true);
     }
+
     @SuppressWarnings("unchecked")
-   
-    
+
+
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -60,13 +65,13 @@ public class MainFrame extends javax.swing.JFrame {
         classification = new javax.swing.JLabel();
         valueTxt = new javax.swing.JTextField();
         value = new javax.swing.JLabel();
-        dateTxt = new javax.swing.JTextField();
         date = new javax.swing.JLabel();
         exitCheck = new javax.swing.JCheckBox();
         entryCheck = new javax.swing.JCheckBox();
         registerBtn = new javax.swing.JButton();
         deleteBtn = new javax.swing.JButton();
         classificationCombo = new javax.swing.JComboBox<>();
+        dateTxt = new javax.swing.JFormattedTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -262,6 +267,12 @@ public class MainFrame extends javax.swing.JFrame {
         classificationCombo.setBackground(new java.awt.Color(255, 255, 255));
         classificationCombo.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
 
+        try {
+            dateTxt.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -271,17 +282,20 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(nameTxt)
                     .addComponent(valueTxt)
-                    .addComponent(dateTxt)
                     .addComponent(classificationCombo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(registerBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 307, Short.MAX_VALUE)
-                    .addComponent(name)
-                    .addComponent(classification)
-                    .addComponent(value)
-                    .addComponent(date)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(entryCheck)
-                        .addGap(35, 35, 35)
-                        .addComponent(exitCheck)))
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(name)
+                            .addComponent(classification)
+                            .addComponent(value)
+                            .addComponent(date)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(entryCheck)
+                                .addGap(35, 35, 35)
+                                .addComponent(exitCheck)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(dateTxt))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -362,7 +376,7 @@ public class MainFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void registerBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_registerBtnMouseClicked
-       this.controller.registerMovement();
+        this.controller.registerMovement();
     }//GEN-LAST:event_registerBtnMouseClicked
 
     private void entryCheckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_entryCheckActionPerformed
@@ -377,21 +391,19 @@ public class MainFrame extends javax.swing.JFrame {
         this.controller.removeMovement(getEntryTable().getSelectedRow());
     }//GEN-LAST:event_deleteBtnMouseClicked
 
-
-
-    private void inserirNoCombo(){
+    private void inserirNoCombo() {
         DefaultComboBoxModel myComboModel = new DefaultComboBoxModel();
-        myComboModel.addElement(Classification.ALIMENTACAO.getValue());
-        myComboModel.addElement(Classification.AUTOMOVEL.getValue());
-        myComboModel.addElement(Classification.BEM_ESTAR.getValue());
-        myComboModel.addElement(Classification.CASA.getValue());
-        myComboModel.addElement(Classification.INVESTIMENTO.getValue());
-        myComboModel.addElement(Classification.SALARIO.getValue());
-        myComboModel.addElement(Classification.SAUDE.getValue());
-        myComboModel.addElement(Classification.OUTRO.getValue());
+        myComboModel.addElement(Classification.ALIMENTACAO);
+        myComboModel.addElement(Classification.AUTOMOVEL);
+        myComboModel.addElement(Classification.BEM_ESTAR);
+        myComboModel.addElement(Classification.CASA);
+        myComboModel.addElement(Classification.INVESTIMENTO);
+        myComboModel.addElement(Classification.SALARIO);
+        myComboModel.addElement(Classification.SAUDE);
+        myComboModel.addElement(Classification.OUTRO);
         classificationCombo.setModel(myComboModel);
     }
-    
+
     public static void main(String args[]) {
 
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -405,7 +417,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel classification;
     private javax.swing.JComboBox<String> classificationCombo;
     private javax.swing.JLabel date;
-    private javax.swing.JTextField dateTxt;
+    private javax.swing.JFormattedTextField dateTxt;
     private javax.swing.JButton deleteBtn;
     private javax.swing.JLabel entrada;
     private javax.swing.JLabel entradaTxt;
@@ -443,11 +455,11 @@ public class MainFrame extends javax.swing.JFrame {
         this.classificationCombo = classificationCombo;
     }
 
-    public JTextField getDateTxt() {
+    public JFormattedTextField getDateTxt() {
         return dateTxt;
     }
 
-    public void setDateTxt(JTextField dateTxt) {
+    public void setDateTxt(JFormattedTextField dateTxt) {
         this.dateTxt = dateTxt;
     }
 
@@ -498,7 +510,23 @@ public class MainFrame extends javax.swing.JFrame {
     public void setResultadoTxt(JLabel resultadoTxt) {
         this.resultadoTxt = resultadoTxt;
     }
-    
+
+    public JCheckBox getEntryCheck() {
+        return entryCheck;
+    }
+
+    public void setEntryCheck(JCheckBox entryCheck) {
+        this.entryCheck = entryCheck;
+    }
+
+    public JCheckBox getExitCheck() {
+        return exitCheck;
+    }
+
+    public void setExitCheck(JCheckBox exitCheck) {
+        this.exitCheck = exitCheck;
+    }
+
     private void startTable() {
         this.controller.updateTable();
     }
@@ -514,6 +542,5 @@ public class MainFrame extends javax.swing.JFrame {
     private void updateExit() {
         this.controller.updateExit();
     }
-    
-    
+
 }

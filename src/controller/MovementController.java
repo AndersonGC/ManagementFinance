@@ -1,6 +1,7 @@
 package controller;
 
 import DAO.MovementDAO;
+import Tools.ConectionFabric;
 import java.awt.Label;
 import java.time.Clock;
 import java.util.ArrayList;
@@ -15,25 +16,30 @@ public class MovementController {
     private final MainFrame view;
     private final MovementDAO movementDAO = new MovementDAO();
     private double result = 0;
-
+    
+    
     public MovementController(MainFrame view) {
         this.view = view;
 
     }
 
     public Classification returnClassification(Object classification) {
-        return (Classification) view.getClassificationCombo().getSelectedItem();
+        return (Classification)view.getClassificationCombo().getSelectedItem();
     }
 
     public void registerMovement() {
 
         String name = view.getNameTxt().getText();
-        Classification classification = returnClassification(view.getClassificationCombo().getSelectedItem());
+        Classification classification = (Classification)view.getClassificationCombo().getSelectedItem();
         Double value = Double.valueOf(view.getValueTxt().getText());
         String entryDay = view.getDateTxt().getText();
         Date registrationDay = new Date();
+        int transactionType = view.getEntryCheck().isSelected() ?  1 : 0;
+        
+        Movement mov = new Movement(name, classification, value, entryDay, registrationDay, transactionType);
+        System.out.println(mov.toString());
 
-        movementDAO.insert(new Movement(name, classification, value, entryDay, registrationDay));
+        //movementDAO.insert(new Movement(name, classification, value, entryDay, registrationDay, transactionType));
 
     }
 
@@ -67,7 +73,7 @@ public class MovementController {
         for (Movement movement : movements) {
             tableModel.addRow(new Object[]{
                 movement.getName(),
-                movement.getClassification().getValue(),
+                movement.getClassification(),
                 movement.getValue(),
                 movement.getEntryDay(),
                 movement.getRegistrationDay()
