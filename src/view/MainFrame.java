@@ -415,7 +415,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel classification;
-    private javax.swing.JComboBox<String> classificationCombo;
+    private javax.swing.JComboBox<model.Classification> classificationCombo;
     private javax.swing.JLabel date;
     private javax.swing.JFormattedTextField dateTxt;
     private javax.swing.JButton deleteBtn;
@@ -447,13 +447,13 @@ public class MainFrame extends javax.swing.JFrame {
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("./img/icon.png")));
     }
 
-    public JComboBox<String> getClassificationCombo() {
+    public JComboBox<Classification> getClassificationCombo() {
         return classificationCombo;
     }
 
-    public void setClassificationCombo(JComboBox<String> classificationCombo) {
+    public void setClassificationCombo(JComboBox<Classification> classificationCombo) {
         this.classificationCombo = classificationCombo;
-    }
+    }  
 
     public JFormattedTextField getDateTxt() {
         return dateTxt;

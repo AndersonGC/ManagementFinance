@@ -4,8 +4,9 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/D:/Documentos/Projetos%20NetBeans/ManagementFinance/src/view/MainFrame.java</file>
-            <file>file:/D:/Documentos/Projetos%20NetBeans/ManagementFinance/src/model/Movement.java</file>
+            <file>file:/D:/Documentos/Projetos%20NetBeans/ManagementFinance/src/Tools/ConectionFabric.java</file>
             <file>file:/D:/Documentos/Projetos%20NetBeans/ManagementFinance/src/model/Classification.java</file>
+            <file>file:/D:/Documentos/Projetos%20NetBeans/ManagementFinance/src/model/Movement.java</file>
             <file>file:/D:/Documentos/Projetos%20NetBeans/ManagementFinance/src/controller/MovementController.java</file>
             <file>file:/D:/Documentos/Projetos%20NetBeans/ManagementFinance/src/DAO/MovementDAO.java</file>
         </group>

@@ -1,6 +1,7 @@
 package model;
 
 public enum Classification {
+    ENERGIA("Energia"),
     CASA("Casa"),
     COMPRAS("Compras"),  
     SAUDE("Saúde"),  

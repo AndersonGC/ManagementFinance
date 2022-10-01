@@ -77,6 +77,7 @@ public class MovementController {
                 movement.getValue(),
                 movement.getEntryDay(),
                 movement.getRegistrationDay()
+               
             });
         }
 
