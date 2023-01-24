@@ -1,0 +1,5 @@
+Segue algumas dificuldades encontradas pelo grupo:
+
+1 - Apesar de conseguirmos criar a tabela no banco, não conseguimos elaborar uma conexão na aplicação, e nem fazer nenhum tipo de operação.
+2 - Não conseguimos implantar o metodo de remove, pois não conseguimos comparar a posição retornada na tabela com o metodo "selectRow()" com o index da lista.
+3 - Tentamos chegar o mais perto possível da arquitetura MVC, respeitando as chamadas. Porém houve dificuldades de entender a classe DAO.

@@ -17,6 +17,23 @@ public enum Classification {
     Classification(String value){
         this.value = value;
     }
+    
+    public static Classification getClassification(String description) {
+        
+        switch(description) {
+            case "Energia": return ENERGIA;
+            case "Casa": return CASA;
+            case "Compras": return COMPRAS;
+            case "Saúde": return SAUDE;
+            case "Automóvel": return AUTOMOVEL;
+            case "Alimentação": return ALIMENTACAO;
+            case "Bem estar": return BEM_ESTAR;
+            case "Investimento": return INVESTIMENTO;
+            case "Salário": return SALARIO;
+            case "Outros": return OUTRO;
+            default: return null;
+        }
+    }
 
     @Override
     public String toString() {

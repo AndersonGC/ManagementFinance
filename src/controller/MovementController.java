@@ -1,86 +1,67 @@
 package controller;
 
-import DAO.MovementDAO;
-import Tools.ConectionFabric;
-import java.awt.Label;
-import java.time.Clock;
-import java.util.ArrayList;
-import java.util.Date;
-import javax.swing.table.DefaultTableModel;
-import model.Classification;
+import java.util.Vector;
 import model.Movement;
-import view.MainFrame;
+import repository.MovementRepository;
 
 public class MovementController {
-
-    private final MainFrame view;
-    private final MovementDAO movementDAO = new MovementDAO();
-    private double result = 0;
     
-    
-    public MovementController(MainFrame view) {
-        this.view = view;
+    private final MovementRepository movRepository = new MovementRepository();
 
-    }
-
-    public Classification returnClassification(Object classification) {
-        return (Classification)view.getClassificationCombo().getSelectedItem();
-    }
-
-    public void registerMovement() {
-
-        String name = view.getNameTxt().getText();
-        Classification classification = (Classification)view.getClassificationCombo().getSelectedItem();
-        Double value = Double.valueOf(view.getValueTxt().getText());
-        String entryDay = view.getDateTxt().getText();
-        Date registrationDay = new Date();
-        int transactionType = view.getEntryCheck().isSelected() ?  1 : 0;
+    public void registerMovement(Movement newMovement) {
         
-        Movement mov = new Movement(name, classification, value, entryDay, registrationDay, transactionType);
-        System.out.println(mov.toString());
-
-        //movementDAO.insert(new Movement(name, classification, value, entryDay, registrationDay, transactionType));
-
+        movRepository.insertMovement(newMovement);
     }
 
-    //Atualiza o valor do resultado (Ganhos - Gastos)
-    public void updateResult() {
-        result = 0;//Implemntar o metodo de pesquisa no banco, que retorna o valor de gastos - ganho;
-        view.getResultadoTxt().setText("R$ " + result);
+    public void removeMovement(Movement deletedMovement) {
+        this.movRepository.removeMovement(deletedMovement.getId());
     }
 
-    public void updateEntry() {
-        result = 0;//Implemntar o metodo de pesquisa no banco, que retorna o valor total do ganho;
-        view.getEntradaTxt().setText("R$ " + result);
+    public Vector<Movement> allEntry() {
+        Vector<Movement> entryData = this.movRepository.searchAll();
+        return entryData;
     }
-
-    public void updateExit() {
-        result = 0;//Implemntar o metodo de pesquisa no banco, que retorna o valor total dos gastos;
-        view.getSaidaTxt().setText("R$ " + result);
-    }
-
-    public void removeMovement(int selectedRow) {
-
-    }
-
-    public void updateTable() {
-
-        ArrayList<Movement> movements = movementDAO.selectAll();
-
-        DefaultTableModel tableModel = (DefaultTableModel) view.getEntryTable().getModel();
-        tableModel.setNumRows(0);
-
-        for (Movement movement : movements) {
-            tableModel.addRow(new Object[]{
-                movement.getName(),
-                movement.getClassification(),
-                movement.getValue(),
-                movement.getEntryDay(),
-                movement.getRegistrationDay()
-               
-            });
+    
+    public Double updateResult() {
+        Double entrada = 0D, saida = 0D, result = 0D;
+        
+        for(int i = 0; i < getListMovement().size(); i++) {
+            if(getListMovement().get(i).getTransactionType() == true) {
+                entrada += getListMovement().get(i).getValue();
+            } else {
+                saida += getListMovement().get(i).getValue();
+            }
         }
-
+        result = entrada - saida;
+        return result;
     }
-
+    
+    public Double updateEntry() {
+        Double result = 0D;
+        
+        for(int i = 0; i < getListMovement().size(); i++) {
+            if(getListMovement().get(i).getTransactionType() == true) {
+                result += getListMovement().get(i).getValue();
+            }
+        }
+        return result;
+    }
+        
+    public Double updateExit() {
+        Double result = 0D;
+        
+        for(int i = 0; i < getListMovement().size(); i++) {
+            if(getListMovement().get(i).getTransactionType() == false) {
+                result += getListMovement().get(i).getValue();
+            } 
+        }
+        
+        return result;
+    }
+    
+    public Vector<Movement> getListMovement() {
+        Vector<Movement> movements = movRepository.searchAll();
+        
+        return movements;
+    }
 }

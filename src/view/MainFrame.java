@@ -2,8 +2,12 @@ package view;
 
 import controller.MovementController;
 import java.awt.Toolkit;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
@@ -11,6 +15,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.text.MaskFormatter;
@@ -24,17 +29,14 @@ import model.Movement;
 public class MainFrame extends javax.swing.JFrame {
 
     private final MovementController controller;
+    private Table table;
 
     public MainFrame() {
+        controller = new MovementController();
         initComponents();
-        
+        myInitComponents();
         setIconTitle();
         setTitle("Management Finance");
-        controller = new MovementController(this);
-        updateResult();
-        updateEntry();
-        updateExit();
-        startTable();
         inserirNoCombo();
         entryCheck.setSelected(true);
     }
@@ -160,17 +162,17 @@ public class MainFrame extends javax.swing.JFrame {
         entradaTxt.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
         entradaTxt.setForeground(new java.awt.Color(0, 153, 51));
         entradaTxt.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        entradaTxt.setText("R$12,00");
+        entradaTxt.setText("0");
 
         saidaTxt.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
         saidaTxt.setForeground(new java.awt.Color(255, 51, 51));
         saidaTxt.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        saidaTxt.setText("R$8,00");
+        saidaTxt.setText("0");
 
         resultadoTxt.setFont(new java.awt.Font("Trebuchet MS", 1, 24)); // NOI18N
         resultadoTxt.setForeground(new java.awt.Color(255, 255, 255));
         resultadoTxt.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        resultadoTxt.setText("R$20,00");
+        resultadoTxt.setText("0");
 
         resultado.setFont(new java.awt.Font("Trebuchet MS", 1, 24)); // NOI18N
         resultado.setForeground(new java.awt.Color(255, 255, 255));
@@ -376,7 +378,36 @@ public class MainFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void registerBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_registerBtnMouseClicked
-        this.controller.registerMovement();
+        SimpleDateFormat farmatedDate
+                = new SimpleDateFormat("dd/MM/yyyy");
+
+        try {
+
+            String name = getNameTxt().getText();
+            Double value = Double.valueOf(getValueTxt().getText());
+            Classification classification = (Classification) getClassificationCombo().getSelectedItem();
+            Date entryDay = null;
+            Date registrationDay = new Date();
+            boolean movementType = true;
+            entryDay = farmatedDate.parse(dateTxt.getText());
+            if (getEntryCheck().isSelected()) {
+                movementType = true;
+            } else {
+                movementType = false;
+            }
+
+            JOptionPane.showMessageDialog(null, "Cadastro efetuado com sucesso", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            Movement newMovement = new Movement(name, classification, value, entryDay, registrationDay, movementType);
+            table.updateNewMovement(newMovement);
+            this.controller.registerMovement(newMovement);
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Erro! Verifique se todos os campos foram preenchidos", "ERROR!", JOptionPane.ERROR_MESSAGE);
+        }
+
+        cleanInputs();
+        entryTable.updateUI();
+        updateValues();
     }//GEN-LAST:event_registerBtnMouseClicked
 
     private void entryCheckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_entryCheckActionPerformed
@@ -388,7 +419,19 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_exitCheckActionPerformed
 
     private void deleteBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deleteBtnMouseClicked
-        this.controller.removeMovement(getEntryTable().getSelectedRow());
+        int selectedLine = getEntryTable().getSelectedRow();
+        if (selectedLine == -1) {
+            JOptionPane.showMessageDialog(this, "Por favor, selecione um item", "ERROR!", JOptionPane.WARNING_MESSAGE);
+        } else {
+            int option = JOptionPane.showConfirmDialog(this, "Deseja realmente excluir esse item?", "Confirme", JOptionPane.YES_NO_OPTION); 
+            if(option == JOptionPane.YES_OPTION) {
+                JOptionPane.showMessageDialog(null, "Item removido com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                Movement deletedMovement = table.removeMovement(getEntryTable().getSelectedRow());
+                this.controller.removeMovement(deletedMovement);
+                entryTable.updateUI();
+                updateValues();
+            }
+        }
     }//GEN-LAST:event_deleteBtnMouseClicked
 
     private void inserirNoCombo() {
@@ -447,52 +490,62 @@ public class MainFrame extends javax.swing.JFrame {
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("./img/icon.png")));
     }
 
+    private void myInitComponents() {
+        this.table = new Table();
+        entryTable.setModel(this.table);
+        updateValues();
+    }
+
+    public void cleanInputs() {
+        setNameTxt("");
+        setValueTxt("");
+        setDateTxt("");
+    }
+
+    public void updateValues() {
+        setResultadoTxt(this.controller.updateResult().toString());
+        setEntradaTxt(this.controller.updateEntry().toString());
+        setSaidaTxt(this.controller.updateExit().toString());
+    }
+
     public JComboBox<Classification> getClassificationCombo() {
         return classificationCombo;
     }
 
     public void setClassificationCombo(JComboBox<Classification> classificationCombo) {
         this.classificationCombo = classificationCombo;
-    }  
+    }
 
     public JFormattedTextField getDateTxt() {
         return dateTxt;
     }
 
-    public void setDateTxt(JFormattedTextField dateTxt) {
-        this.dateTxt = dateTxt;
+    public void setDateTxt(String dateTxt) {
+        this.dateTxt.setText(dateTxt);
     }
 
-    public JLabel getEntradaTxt() {
-        return entradaTxt;
-    }
-
-    public void setEntradaTxt(JLabel entradaTxt) {
-        this.entradaTxt = entradaTxt;
+    public void setEntradaTxt(String entradaTxt) {
+        this.entradaTxt.setText("R$" + entradaTxt);
     }
 
     public JTextField getNameTxt() {
         return nameTxt;
     }
 
-    public void setNameTxt(JTextField nameTxt) {
-        this.nameTxt = nameTxt;
+    public void setNameTxt(String nameTxt) {
+        this.nameTxt.setText(nameTxt);
     }
 
-    public JLabel getSaidaTxt() {
-        return saidaTxt;
-    }
-
-    public void setSaidaTxt(JLabel saidaTxt) {
-        this.saidaTxt = saidaTxt;
+    public void setSaidaTxt(String saidaTxt) {
+        this.saidaTxt.setText("R$" + saidaTxt);
     }
 
     public JTextField getValueTxt() {
         return valueTxt;
     }
 
-    public void setValueTxt(JTextField valueTxt) {
-        this.valueTxt = valueTxt;
+    public void setValueTxt(String valueTxt) {
+        this.valueTxt.setText(valueTxt);
     }
 
     public JTable getEntryTable() {
@@ -503,44 +556,16 @@ public class MainFrame extends javax.swing.JFrame {
         this.entryTable = entryTable;
     }
 
-    public JLabel getResultadoTxt() {
-        return resultadoTxt;
-    }
-
-    public void setResultadoTxt(JLabel resultadoTxt) {
-        this.resultadoTxt = resultadoTxt;
+    public void setResultadoTxt(String resultadoTxt) {
+        this.resultadoTxt.setText("R$" + resultadoTxt);
     }
 
     public JCheckBox getEntryCheck() {
         return entryCheck;
     }
 
-    public void setEntryCheck(JCheckBox entryCheck) {
-        this.entryCheck = entryCheck;
-    }
-
     public JCheckBox getExitCheck() {
         return exitCheck;
-    }
-
-    public void setExitCheck(JCheckBox exitCheck) {
-        this.exitCheck = exitCheck;
-    }
-
-    private void startTable() {
-        this.controller.updateTable();
-    }
-
-    private void updateResult() {
-        this.controller.updateResult();
-    }
-
-    private void updateEntry() {
-        this.controller.updateEntry();
-    }
-
-    private void updateExit() {
-        this.controller.updateExit();
     }
 
 }

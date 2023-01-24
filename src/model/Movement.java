@@ -13,20 +13,26 @@ public class Movement {
     private Double value;
     private Date entryDay;
     private Date registrationDay;
-    private int transactionType;
+    private boolean transactionType;
     private long id;
 
-    public Movement(String name, Classification classification, Double value, String entryDay, Date registrationDay, int transactionType) {
+    public Movement(String name, Classification classification, Double value, Date entryDay, Date registrationDay, boolean transactionType) {
         this.name = name;
         this.classification = classification;
         this.value = value;
-        try {
-            this.entryDay = new SimpleDateFormat("dd/MM/yyyy").parse(entryDay);
-        } catch (ParseException ex) {
-            Logger.getLogger(Movement.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        this.entryDay = entryDay;
         this.registrationDay = registrationDay;
         this.transactionType = transactionType;
+    }
+    
+    public Movement(String name, Classification classification, Double value, Date entryDay, Date registrationDay, boolean transactionType, Long id) {
+        this.name = name;
+        this.classification = classification;
+        this.value = value;
+        this.entryDay = entryDay;
+        this.registrationDay = registrationDay;
+        this.transactionType = transactionType;
+        this.id = id;
     }
 
     public String getName() {
@@ -77,11 +83,11 @@ public class Movement {
         this.id = id;
     }
 
-    public int getTransactionType() {
+    public boolean getTransactionType() {
         return transactionType;
     }
 
-    public void setTransactionType(int transactionType) {
+    public void setTransactionType(boolean transactionType) {
         this.transactionType = transactionType;
     }
     
