@@ -2,23 +2,15 @@ package view;
 
 import controller.MovementController;
 import java.awt.Toolkit;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.text.MaskFormatter;
 import model.Classification;
 import model.Movement;
 
@@ -382,7 +374,6 @@ public class MainFrame extends javax.swing.JFrame {
                 = new SimpleDateFormat("dd/MM/yyyy");
 
         try {
-
             String name = getNameTxt().getText();
             Double value = Double.valueOf(getValueTxt().getText());
             Classification classification = (Classification) getClassificationCombo().getSelectedItem();
@@ -400,7 +391,6 @@ public class MainFrame extends javax.swing.JFrame {
             Movement newMovement = new Movement(name, classification, value, entryDay, registrationDay, movementType);
             table.updateNewMovement(newMovement);
             this.controller.registerMovement(newMovement);
-
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Erro! Verifique se todos os campos foram preenchidos", "ERROR!", JOptionPane.ERROR_MESSAGE);
         }
@@ -423,8 +413,8 @@ public class MainFrame extends javax.swing.JFrame {
         if (selectedLine == -1) {
             JOptionPane.showMessageDialog(this, "Por favor, selecione um item", "ERROR!", JOptionPane.WARNING_MESSAGE);
         } else {
-            int option = JOptionPane.showConfirmDialog(this, "Deseja realmente excluir esse item?", "Confirme", JOptionPane.YES_NO_OPTION); 
-            if(option == JOptionPane.YES_OPTION) {
+            int option = JOptionPane.showConfirmDialog(this, "Deseja realmente excluir esse item?", "Confirme", JOptionPane.YES_NO_OPTION);
+            if (option == JOptionPane.YES_OPTION) {
                 JOptionPane.showMessageDialog(null, "Item removido com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
                 Movement deletedMovement = table.removeMovement(getEntryTable().getSelectedRow());
                 this.controller.removeMovement(deletedMovement);

@@ -1,10 +1,7 @@
 package model;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Movement {
 
@@ -24,7 +21,7 @@ public class Movement {
         this.registrationDay = registrationDay;
         this.transactionType = transactionType;
     }
-    
+
     public Movement(String name, Classification classification, Double value, Date entryDay, Date registrationDay, boolean transactionType, Long id) {
         this.name = name;
         this.classification = classification;
@@ -90,15 +87,15 @@ public class Movement {
     public void setTransactionType(boolean transactionType) {
         this.transactionType = transactionType;
     }
-    
-    public String getFormatEntryDay(){
+
+    public String getFormatEntryDay() {
         return new SimpleDateFormat("dd/MM/yyyy").format(entryDay);
     }
-    
-    public String getFormatRegistrationDay(){
+
+    public String getFormatRegistrationDay() {
         return new SimpleDateFormat("dd/MM/yyyy").format(registrationDay);
     }
-  
+
     @Override
     public String toString() {
         return "Movement{" + "name=" + name + ", classification=" + classification + ", value=" + value + ", entryDay=" + getFormatEntryDay() + ", registrationDay=" + getFormatRegistrationDay() + ", transactionType=" + transactionType + ", ID=" + id + '}';

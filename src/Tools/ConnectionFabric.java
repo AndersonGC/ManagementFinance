@@ -9,7 +9,7 @@ public class ConnectionFabric {
     private static Connection conexaoBD;
 
     public static Connection getInstance() {
-        
+
         if (conexaoBD == null) {
             try {
                 conexaoBD = DriverManager.getConnection(
